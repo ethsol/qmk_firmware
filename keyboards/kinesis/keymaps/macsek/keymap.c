@@ -48,7 +48,7 @@
 //     }
 // }
 
-void dance_1_finished(tap_dance_state_t *state, void *user_data) {
+void dance_1_f1_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F1);  // Hold-ra az F1-et küldi
     } else if (state->count == 1) {
@@ -60,6 +60,97 @@ void dance_1_reset(tap_dance_state_t *state, void *user_data) {
     // Nincs szükség külön reset logikára ebben az esetben
 }
 
+// Tap Dance functions for each enum item
+
+
+
+void dance_2_f2_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        tap_code(KC_F2);  // Hold-ra az F2-t küldi
+    } else if (state->count == 1) {
+        tap_code(KC_2);   // Tap-ra a 2-t küldi
+    }
+}
+
+void dance_3_f3_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        tap_code(KC_F3);  // Hold-ra az F3-t küldi
+    } else if (state->count == 1) {
+        tap_code(KC_3);   // Tap-ra a 3-t küldi
+    }
+}
+
+void dance_4_f4_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        tap_code(KC_F4);  // Hold-ra az F4-t küldi
+    } else if (state->count == 1) {
+        tap_code(KC_4);   // Tap-ra a 4-t küldi
+    }
+}
+
+void dance_5_f5_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        tap_code(KC_F5);  // Hold-ra az F5-t küldi
+    } else if (state->count == 1) {
+        tap_code(KC_5);   // Tap-ra az 5-t küldi
+    }
+}
+
+void dance_6_f6_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        tap_code(KC_F6);  // Hold-ra az F6-t küldi
+    } else if (state->count == 1) {
+        tap_code(KC_6);   // Tap-ra a 6-ot küldi
+    }
+}
+
+void dance_7_f7_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        tap_code(KC_F7);  // Hold-ra az F7-t küldi
+    } else if (state->count == 1) {
+        tap_code(KC_7);   // Tap-ra a 7-t küldi
+    }
+}
+
+void dance_8_f8_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        tap_code(KC_F8);  // Hold-ra az F8-t küldi
+    } else if (state->count == 1) {
+        tap_code(KC_8);   // Tap-ra a 8-ot küldi
+    }
+}
+
+void dance_9_f9_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        tap_code(KC_F9);  // Hold-ra az F9-t küldi
+    } else if (state->count == 1) {
+        tap_code(KC_9);   // Tap-ra a 9-ot küldi
+    }
+}
+
+void dance_0_f10_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        tap_code(KC_F10); // Hold-ra az F10-et küldi
+    } else if (state->count == 1) {
+        tap_code(KC_GRV);   // Tap-ra a 0-át küldi
+    }
+}
+
+void dance_0_f11_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        tap_code(KC_F11); // Hold-ra az F11-et küldi
+    } else if (state->count == 1) {
+        tap_code(KC_0);   // Tap-ra a 0-át küldi
+    }
+}
+
+void dance_m_f12_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        tap_code(KC_F12); // Hold-ra az F12-t küldi
+    } else if (state->count == 1) {
+        tap_code(KC_MINS);    // Tap-ra az M-et küldi
+    }
+}
 
 
 // https://docs.qmk.fm/features/tap_dance
@@ -84,19 +175,46 @@ enum {
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for Escape, twice for Caps Lock
     [TD_CAPS_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_CAPS, KC_ESC),
-    [TD_1_F1] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, dance_1_reset),
+    //[TD_1_F1] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, dance_1_reset),
+
+//ACTION_TAP_DANCE_FN
+    [TD_1_F1] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_f1_finished, NULL),
+    [TD_2_F2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_2_f2_finished, NULL),
+    [TD_3_F3] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_3_f3_finished, NULL),
+    [TD_4_F4] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_4_f4_finished, NULL),
+    [TD_5_F5] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_5_f5_finished, NULL),
+    [TD_6_F6] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_6_f6_finished, NULL),
+    [TD_7_F7] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_7_f7_finished, NULL),
+    [TD_8_F8] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_8_f8_finished, NULL),
+    [TD_9_F9] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_9_f9_finished, NULL),
+    [TD_0_F10] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_0_f10_finished, NULL),
+    [TD_0_F11] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_0_f11_finished, NULL),
+    [TD_M_F12] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_m_f12_finished, NULL),
+
+    /* [TD_1_F1] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
+    [TD_2_F2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
+    [TD_3_F3] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
+    [TD_4_F4] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
+    [TD_5_F5] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
+    [TD_6_F6] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
+    [TD_7_F7] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
+    [TD_8_F8] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
+    [TD_9_F9] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
+    [TD_0_F10] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
+    [TD_0_F11] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
+    [TD_M_F12] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL), */
     //[TD_1_F1] = ACTION_TAP_DANCE_DOUBLE(KC_1, KC_F1),
-    [TD_2_F2] = ACTION_TAP_DANCE_DOUBLE(KC_2, KC_F2),
-    [TD_3_F3] = ACTION_TAP_DANCE_DOUBLE(KC_3, KC_F3),
-    [TD_4_F4] = ACTION_TAP_DANCE_DOUBLE(KC_4, KC_F4),
-    [TD_5_F5] = ACTION_TAP_DANCE_DOUBLE(KC_5, KC_F5),
-    [TD_6_F6] = ACTION_TAP_DANCE_DOUBLE(KC_6, KC_F6),
-    [TD_7_F7] = ACTION_TAP_DANCE_DOUBLE(KC_7, KC_F7),
-    [TD_8_F8] = ACTION_TAP_DANCE_DOUBLE(KC_8, KC_F8),
-    [TD_9_F9] = ACTION_TAP_DANCE_DOUBLE(KC_9, KC_F9),
-    [TD_0_F10] = ACTION_TAP_DANCE_DOUBLE(KC_GRV, KC_F10),
-    [TD_0_F11] = ACTION_TAP_DANCE_DOUBLE(KC_0, KC_F11),
-    [TD_M_F12] = ACTION_TAP_DANCE_DOUBLE(KC_MINS, KC_F12),
+    //[TD_2_F2] = ACTION_TAP_DANCE_DOUBLE(KC_2, KC_F2),
+    //[TD_3_F3] = ACTION_TAP_DANCE_DOUBLE(KC_3, KC_F3),
+    //[TD_4_F4] = ACTION_TAP_DANCE_DOUBLE(KC_4, KC_F4),
+    //[TD_5_F5] = ACTION_TAP_DANCE_DOUBLE(KC_5, KC_F5),
+    //[TD_6_F6] = ACTION_TAP_DANCE_DOUBLE(KC_6, KC_F6),
+    //[TD_7_F7] = ACTION_TAP_DANCE_DOUBLE(KC_7, KC_F7),
+    //[TD_8_F8] = ACTION_TAP_DANCE_DOUBLE(KC_8, KC_F8),
+    //[TD_9_F9] = ACTION_TAP_DANCE_DOUBLE(KC_9, KC_F9),
+    //[TD_0_F10] = ACTION_TAP_DANCE_DOUBLE(KC_GRV, KC_F10),
+    //[TD_0_F11] = ACTION_TAP_DANCE_DOUBLE(KC_0, KC_F11),
+    //[TD_M_F12] = ACTION_TAP_DANCE_DOUBLE(KC_MINS, KC_F12),
 };
 
 #define CAPS_ESC TD(TD_CAPS_ESC)
@@ -118,7 +236,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [QWERTY] = LAYOUT(
     KC_ESC,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,    KC_F6,    KC_F7,    KC_F8,         KC_F9,    KC_F10,   KC_F11,   KC_F12,   KC_PSCR,  KC_SCRL,  KC_PAUS,  TO(KEYPAD),XXXXXXX,
-    TD_0_F10, TD(TD_1_F1),  TD_2_F2,  TD_3_F3,  TD_4_F4,  TD_5_F5,                                                                   TD_6_F6,  TD_7_F7,  TD_8_F8,  TD_9_F9,  TD_0_F11, TD_M_F12,
+    TD(TD_0_F10), TD(TD_1_F1),  TD(TD_2_F2),  TD(TD_3_F3),  TD(TD_4_F4),  TD(TD_5_F5),                                                                   TD(TD_6_F6),  TD(TD_7_F7),  TD(TD_8_F8),  TD(TD_9_F9),  TD(TD_0_F11), TD(TD_M_F12),
     KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,                                                                      KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_BSLS,
     CAPS_ESC, KC_A,     KC_S,     KC_D,     KC_F,     KC_G,                                                                      KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,
     KC_LSFT,  KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,                                                                      KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,
