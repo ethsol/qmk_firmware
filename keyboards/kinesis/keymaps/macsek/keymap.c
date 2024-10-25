@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include QMK_KEYBOARD_H
+#include "quantum/caps_word.h"
 
 #define QWERTY 0 // Base qwerty
 #define KEYPAD 1
@@ -153,7 +154,27 @@ void dance_m_f12_finished(tap_dance_state_t *state, void *user_data) {
     }
 }
 
-// chatgpt
+
+// Tap Dance CAPS bekapcsolo logika
+void dance_caps_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        register_code(KC_CAPS);    // Hosszan lenyomva Caps Lock
+    } else if (state->count == 1) {
+        caps_word_on();            // Egyszeri koppintásra Caps Word mód
+    } else if (state->count == 2) {
+        tap_code(KC_ESC);          // Dupla koppintásra ESC
+    }
+}
+
+// Tap Dance CAPS kikapcsolo logika
+void dance_caps_reset(tap_dance_state_t *state, void *user_data) {
+    if (! state->pressed) {
+        unregister_code(KC_CAPS);  // Caps Lock felengedése, ha hosszan nyomva volt
+    } /* else {
+        caps_word_off();           // Caps Word mód kikapcsolása
+    } */
+}
+
 // Tap Dance callback a bal Alt gombhoz
 void dance_lalt_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
@@ -194,11 +215,6 @@ void dance_ralt_reset(tap_dance_state_t *state, void *user_data) {
     }
 }
 
-/* enum custom_keycodes {
-    ALT_OPEN = SAFE_RANGE,
-    ALT_CLSE
-}; */
-
 // https://docs.qmk.fm/features/tap_dance
 // Tap Dance declarations
 enum {
@@ -221,7 +237,8 @@ enum {
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
-    [TD_CAPS_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_CAPS, KC_ESC),   // Tap once for Caps Lock, twice for Escape
+    // [TD_CAPS_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_CAPS, KC_ESC),   // Tap once for Caps Lock, twice for Escape
+    [TD_CAPS_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_caps_finished, dance_caps_reset), // Tap once for Caps Word, twice for Escape, hold for Caps Lock
 
     [TD_1_F1] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_f1_finished, NULL),
     [TD_2_F2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_2_f2_finished, NULL),
@@ -241,55 +258,6 @@ tap_dance_action_t tap_dance_actions[] = {
 };
 
 #define CAPS_ESC TD(TD_CAPS_ESC)
-
-// copilot web
-/* bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    static uint16_t tap_timer;
-
-    switch (keycode) {
-        case ALT_OPEN:
-            if (record->event.pressed) {
-                tap_timer = record->event.time;
-                register_code(KC_LALT);
-            } else {
-                uint16_t elapsed = record->event.time - tap_timer;
-                if (elapsed < TAPPING_TERM) {
-                    if (record->tap.count == 1) {
-                        tap_code16(LSFT(KC_8));
-                    } else if (record->tap.count == 2) {
-                        tap_code16(ALGR(KC_F));
-                    } else if (record->tap.count == 3) {
-                        tap_code16(ALGR(KC_B));
-                    }
-                }
-                unregister_code(KC_LALT);
-            }
-            return false;
-        case ALT_CLSE:
-            if (record->event.pressed) {
-                tap_timer = record->event.time;
-                register_code(KC_RALT);
-            } else {
-                uint16_t elapsed = record->event.time - tap_timer;
-                if (elapsed < TAPPING_TERM) {
-                    if (record->tap.count == 1) {
-                        tap_code16(LSFT(KC_9));
-                    } else if (record->tap.count == 2) {
-                        tap_code16(ALGR(KC_G));
-                    } else if (record->tap.count == 3) {
-                        tap_code16(ALGR(KC_N));
-                    }
-                }
-                unregister_code(KC_RALT);
-            }
-            return false;
-    }
-    return true;
-} */
-
-
-
-
 
 #define ALT_OPEN TD(TD_LALT)
 #define ALT_CLSE TD(TD_RALT)
