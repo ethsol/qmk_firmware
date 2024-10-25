@@ -48,6 +48,7 @@
 //     }
 // }
 
+
 void dance_1_f1_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F1);  // Hold-ra az F1-et küldi
@@ -152,6 +153,51 @@ void dance_m_f12_finished(tap_dance_state_t *state, void *user_data) {
     }
 }
 
+// chatgpt
+// Tap Dance callback a bal Alt gombhoz
+void dance_lalt_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        register_code(KC_LALT);  // Ha tartjuk, Alt gombot küldi
+    } else if (state->count == 1) {
+        tap_code16(S(KC_8));     // 1 Tap: '('
+    } else if (state->count == 2) {
+        tap_code16(RALT(KC_F));  // 2 Tap: '['
+    } else if (state->count == 3) {
+        tap_code16(RALT(KC_B));  // 3 Tap: '{'
+    }
+}
+
+// Tap Dance reset callback a bal Alt gombhoz
+void dance_lalt_reset(tap_dance_state_t *state, void *user_data) {
+    if (! state->pressed) {
+        unregister_code(KC_LALT);  // Felengedéskor engedi el az Alt-ot, ha nyomva volt
+    }
+}
+
+// Tap Dance callback a jobb AltGr gombhoz
+void dance_ralt_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->pressed) {
+        register_code(KC_RALT);  // Ha tartjuk, AltGr gombot küldi
+    } else if (state->count == 1) {
+        tap_code16(S(KC_9));     // 1 Tap: ')'
+    } else if (state->count == 2) {
+        tap_code16(RALT(KC_G));  // 2 Tap: ']'
+    } else if (state->count == 3) {
+        tap_code16(RALT(KC_N));  // 3 Tap: '}'
+    }
+}
+
+// Tap Dance reset callback a jobb AltGr gombhoz
+void dance_ralt_reset(tap_dance_state_t *state, void *user_data) {
+    if (! state->pressed) {
+        unregister_code(KC_RALT);  // Felengedéskor engedi el az AltGr-ot, ha nyomva volt
+    }
+}
+
+/* enum custom_keycodes {
+    ALT_OPEN = SAFE_RANGE,
+    ALT_CLSE
+}; */
 
 // https://docs.qmk.fm/features/tap_dance
 // Tap Dance declarations
@@ -169,15 +215,14 @@ enum {
     TD_0_F10,
     TD_0_F11,
     TD_M_F12,
+    TD_LALT,  // Bal Alt nyito zarojelekhez
+    TD_RALT,  // AltGr zaro zarojelekhez
 };
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
-    // Tap once for Escape, twice for Caps Lock
-    [TD_CAPS_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_CAPS, KC_ESC),
-    //[TD_1_F1] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, dance_1_reset),
+    [TD_CAPS_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_CAPS, KC_ESC),   // Tap once for Caps Lock, twice for Escape
 
-//ACTION_TAP_DANCE_FN
     [TD_1_F1] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_f1_finished, NULL),
     [TD_2_F2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_2_f2_finished, NULL),
     [TD_3_F3] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_3_f3_finished, NULL),
@@ -191,33 +236,64 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_0_F11] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_0_f11_finished, NULL),
     [TD_M_F12] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_m_f12_finished, NULL),
 
-    /* [TD_1_F1] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
-    [TD_2_F2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
-    [TD_3_F3] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
-    [TD_4_F4] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
-    [TD_5_F5] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
-    [TD_6_F6] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
-    [TD_7_F7] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
-    [TD_8_F8] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
-    [TD_9_F9] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
-    [TD_0_F10] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
-    [TD_0_F11] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL),
-    [TD_M_F12] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_1_finished, NULL), */
-    //[TD_1_F1] = ACTION_TAP_DANCE_DOUBLE(KC_1, KC_F1),
-    //[TD_2_F2] = ACTION_TAP_DANCE_DOUBLE(KC_2, KC_F2),
-    //[TD_3_F3] = ACTION_TAP_DANCE_DOUBLE(KC_3, KC_F3),
-    //[TD_4_F4] = ACTION_TAP_DANCE_DOUBLE(KC_4, KC_F4),
-    //[TD_5_F5] = ACTION_TAP_DANCE_DOUBLE(KC_5, KC_F5),
-    //[TD_6_F6] = ACTION_TAP_DANCE_DOUBLE(KC_6, KC_F6),
-    //[TD_7_F7] = ACTION_TAP_DANCE_DOUBLE(KC_7, KC_F7),
-    //[TD_8_F8] = ACTION_TAP_DANCE_DOUBLE(KC_8, KC_F8),
-    //[TD_9_F9] = ACTION_TAP_DANCE_DOUBLE(KC_9, KC_F9),
-    //[TD_0_F10] = ACTION_TAP_DANCE_DOUBLE(KC_GRV, KC_F10),
-    //[TD_0_F11] = ACTION_TAP_DANCE_DOUBLE(KC_0, KC_F11),
-    //[TD_M_F12] = ACTION_TAP_DANCE_DOUBLE(KC_MINS, KC_F12),
+    [TD_LALT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_lalt_finished, dance_lalt_reset),
+    [TD_RALT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_ralt_finished, dance_ralt_reset),
 };
 
 #define CAPS_ESC TD(TD_CAPS_ESC)
+
+// copilot web
+/* bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    static uint16_t tap_timer;
+
+    switch (keycode) {
+        case ALT_OPEN:
+            if (record->event.pressed) {
+                tap_timer = record->event.time;
+                register_code(KC_LALT);
+            } else {
+                uint16_t elapsed = record->event.time - tap_timer;
+                if (elapsed < TAPPING_TERM) {
+                    if (record->tap.count == 1) {
+                        tap_code16(LSFT(KC_8));
+                    } else if (record->tap.count == 2) {
+                        tap_code16(ALGR(KC_F));
+                    } else if (record->tap.count == 3) {
+                        tap_code16(ALGR(KC_B));
+                    }
+                }
+                unregister_code(KC_LALT);
+            }
+            return false;
+        case ALT_CLSE:
+            if (record->event.pressed) {
+                tap_timer = record->event.time;
+                register_code(KC_RALT);
+            } else {
+                uint16_t elapsed = record->event.time - tap_timer;
+                if (elapsed < TAPPING_TERM) {
+                    if (record->tap.count == 1) {
+                        tap_code16(LSFT(KC_9));
+                    } else if (record->tap.count == 2) {
+                        tap_code16(ALGR(KC_G));
+                    } else if (record->tap.count == 3) {
+                        tap_code16(ALGR(KC_N));
+                    }
+                }
+                unregister_code(KC_RALT);
+            }
+            return false;
+    }
+    return true;
+} */
+
+
+
+
+
+#define ALT_OPEN TD(TD_LALT)
+#define ALT_CLSE TD(TD_RALT)
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -241,7 +317,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     CAPS_ESC, KC_A,     KC_S,     KC_D,     KC_F,     KC_G,                                                                      KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,
     KC_LSFT,  KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,                                                                      KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,
               KC_EQL,   KC_INS,   KC_LEFT,  KC_RGHT,                                                                                       KC_UP,    KC_DOWN,  KC_LBRC,  KC_RBRC,
-                                                      KC_LCTL,  KC_LALT,                                               KC_RGUI,  KC_RALT,
+                                                      KC_LCTL,  /*KC_LALT*/ALT_OPEN,                                               KC_RGUI,  /*KC_RALT*/ALT_CLSE,
                                                                 KC_HOME,                                               KC_PGUP,
                                             KC_BSPC,  KC_DEL,   KC_END,                                                KC_PGDN,  KC_ENTER, KC_SPC
   ),
