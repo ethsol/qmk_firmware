@@ -258,6 +258,7 @@ tap_dance_action_t tap_dance_actions[] = {
 };
 
 #define CAPS_ESC TD(TD_CAPS_ESC)
+#define ENT_KEYP LT(KEYPAD, KC_ENT)
 
 #define ALT_OPEN TD(TD_LALT)
 #define ALT_CLSE TD(TD_RALT)
@@ -287,15 +288,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
               KC_EQL,   KC_INS,   KC_LEFT,  KC_RGHT,                                                                                       KC_UP,    KC_DOWN,  KC_LBRC,  KC_RBRC,
                                                       KC_LCTL,  /*KC_LALT*/ALT_OPEN,                                               KC_RGUI,  /*KC_RALT*/ALT_CLSE,
                                                                 KC_HOME,                                               KC_PGUP,
-                                            KC_BSPC,  KC_DEL,   KC_END,                                                KC_PGDN,  KC_ENTER, KC_SPC
+                                            KC_BSPC,  KC_DEL,   KC_END,                                                KC_PGDN,  /*KC_ENTER*/ENT_KEYP, KC_SPC
   ),
 
    [KEYPAD] = LAYOUT(
     _______, _______, _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______, TO(QWERTY), QK_BOOT,
     _______, _______, _______, _______, _______, _______,                                                                 _______, KC_NUM,  KC_PEQL, KC_PSLS, KC_PAST,  _______,
-    _______, _______, _______, _______, _______, _______,                                                                 _______, KC_KP_7, KC_KP_8, KC_KP_9, KC_PMNS,  _______,
-    _______, _______, _______, _______, _______, _______,                                                                 _______, KC_KP_4, KC_KP_5, KC_KP_6, KC_PPLS,  _______,
-    _______, _______, _______, _______, _______, _______,                                                                 _______, KC_KP_1, KC_KP_2, KC_KP_3, KC_PENT,  _______,
+    _______, _______, _______, MS_UP,   MS_BTN1, MS_WHLU,                                                                 MS_BTN2, KC_KP_7, KC_KP_8, KC_KP_9, KC_PMNS,  _______,
+    _______, MS_BTN2, MS_LEFT, MS_DOWN, MS_RGHT, MS_BTN3,                                                                 MS_BTN1, KC_KP_4, KC_KP_5, KC_KP_6, KC_PPLS,  _______,
+    _______, _______, _______, MS_WHLL, MS_WHLR, MS_WHLD,                                                                 MS_BTN3, KC_KP_1, KC_KP_2, KC_KP_3, KC_PENT,  _______,
              _______, _______, _______, _______,                                                                                   _______, _______, KC_PDOT, KC_PENT,
                                                  _______, _______,                                               KC_APP,  KC_RCTL,
                                                           _______,                                               _______,
