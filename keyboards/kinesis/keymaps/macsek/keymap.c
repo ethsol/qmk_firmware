@@ -4,9 +4,6 @@
 #include QMK_KEYBOARD_H
 #include "quantum/caps_word.h"
 
-#include "audio.h"
-#include "song_list.h"
-
 #define QWERTY 0 // Base qwerty
 #define KEYPAD 1
 
@@ -36,32 +33,6 @@
 *                                 `--------------------'         `--------------------'
 */
 
-#ifdef AUDIO_ENABLE
-float tone_startup[][2] = SONG(STARTUP_SOUND);
-float tone_qwerty[][2]  = SONG(QWERTY_SOUND);
-float tone_dvorak[][2]  = SONG(DVORAK_SOUND);
-float tone_colemak[][2] = SONG(COLEMAK_SOUND);
-float music_scale[][2]  = SONG(MUSIC_SCALE_SOUND);
-float tone_goodbye[][2] = SONG(GOODBYE_SOUND);
-#endif
-
-void matrix_init_user(void) {
-    #ifdef AUDIO_ENABLE
-        PLAY_SONG(tone_startup);
-    #endif
-}
-
-void startup_user(void) {
-    PLAY_SONG(tone_startup);
-}
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (record->event.pressed) {
-        //PLAY_SONG(CLICKY_SOUND);
-        PLAY_SONG(tone_qwerty);
-    }
-    return true;
-}
 
 
 // void dance_1_finished(tap_dance_state_t *state, void *user_data) {
@@ -321,7 +292,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
    [KEYPAD] = LAYOUT(
     _______, _______, _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______, TO(QWERTY), QK_BOOT,
-    _______, _______, _______, _______, _______, _______,                                                                 _______, KC_NUM,  KC_PEQL, KC_PSLS, KC_PAST,  _______,
+    CK_TOGG, CK_ON,   CK_OFF,  CK_UP,   CK_DOWN, CK_RST,                                                                  _______, KC_NUM,  KC_PEQL, KC_PSLS, KC_PAST,  _______,
     _______, _______, _______, _______, _______, _______,                                                                 _______, KC_KP_7, KC_KP_8, KC_KP_9, KC_PMNS,  _______,
     _______, _______, _______, _______, _______, _______,                                                                 _______, KC_KP_4, KC_KP_5, KC_KP_6, KC_PPLS,  _______,
     _______, _______, _______, _______, _______, _______,                                                                 _______, KC_KP_1, KC_KP_2, KC_KP_3, KC_PENT,  _______,
