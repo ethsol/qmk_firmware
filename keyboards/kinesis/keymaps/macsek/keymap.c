@@ -306,31 +306,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-#define _KEYPADLED_BLINK_DLY 100
 #define KEYPAD_LED_PIN C3
-
-void blink_keypad_led(short blinks) {
-    for (int i = 0; i < blinks; i++) {
-        writePinHigh(KEYPAD_LED_PIN);
-        _delay_ms(_KEYPADLED_BLINK_DLY);
-        writePinLow(KEYPAD_LED_PIN);
-        _delay_ms(_KEYPADLED_BLINK_DLY);
-    }
-}
 
 void matrix_init_user(void) {
     setPinOutput(KEYPAD_LED_PIN); // Set C3 as output for KEYPAD_LED
     writePinLow(KEYPAD_LED_PIN); // Ensure the LED is off at startup
-    blink_keypad_led(10); // Blink LED during initialization
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     state = update_tri_layer_state(state, QWERTY, KEYPAD, 2); // Update layer state
-    if (layer_state_cmp(state, KEYPAD)) {
-        // If KEYPAD layer is active
+    if (layer_state_cmp(state, KEYPAD)) {  // If KEYPAD layer is active
         writePinLow(KEYPAD_LED_PIN); // Turn on KEYPAD_LED
-    } else {
-        // If KEYPAD layer is not active
+    } else { // If KEYPAD layer is not active
         writePinHigh(KEYPAD_LED_PIN); // Turn off KEYPAD_LED
     }
     return state;
@@ -342,15 +329,9 @@ layer_state_t layer_state_change(layer_state_t state) {
     return layer_state_set_user(state);
 }
 
-// // Call this function from matrix_scan_user or similar to keep the LED state updated
-// void process_record_user(uint16_t keycode, keyrecord_t *record) {
-//     // Call layer_state_set_user to ensure LED state is updated
-//     layer_state_set_user(layer_state);
-// }
-
 void matrix_scan_user(void) {
-    // Ellenőrizd a jelenlegi réteget és frissítsd a LED állapotát
+    // Call the layer state set function to ensure LED state is updated
     layer_state_t current_layer = layer_state;
-    layer_state_set_user(current_layer); // Hívjuk meg a layer_state_set_user-t
+    layer_state_set_user(current_layer);
 }
 
