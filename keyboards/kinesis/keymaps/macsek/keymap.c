@@ -323,14 +323,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
-// Make sure to also handle LED state in layer_state_change
-layer_state_t layer_state_change(layer_state_t state) {
-    // Call the layer state set function to ensure LED state is updated
-    return layer_state_set_user(state);
-}
-
 void matrix_scan_user(void) {
-    // Call the layer state set function to ensure LED state is updated
+    // Call the layer state set function to ensure LED state is updated continuously
     layer_state_t current_layer = layer_state;
     layer_state_set_user(current_layer);
 }
