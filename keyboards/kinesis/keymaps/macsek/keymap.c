@@ -307,11 +307,48 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 #define KEYPAD_LED_PIN C3
+#define CAPS_LOCK_LED_PIN C1
+#define NUM_LOCK_LED_PIN C5
+#define SCROLL_LOCK_LED_PIN C4
 
 void matrix_init_user(void) {
-    setPinOutput(KEYPAD_LED_PIN); // Set C3 as output for KEYPAD_LED
-    writePinLow(KEYPAD_LED_PIN); // Ensure the LED is off at startup
+    setPinOutput(KEYPAD_LED_PIN); // Set pin as output for KEYPAD_LED
+    setPinOutput(CAPS_LOCK_LED_PIN); // Set pin as output for CAPS_LOCK_LED
+    setPinOutput(NUM_LOCK_LED_PIN); // Set pin as output for NUM_LOCK_LED
+    setPinOutput(SCROLL_LOCK_LED_PIN); // Set pin as output for SCROLL_LOCK_LED
+
+    #define BLINK_DELAY_MS 100
+    for (int i = 0; i < 10; i++) {
+        writePinLow(CAPS_LOCK_LED_PIN);
+        wait_ms(BLINK_DELAY_MS);
+        writePinHigh(CAPS_LOCK_LED_PIN);
+        wait_ms(BLINK_DELAY_MS);
+    }
+    for (int i = 0; i < 10; i++) {
+        writePinLow(NUM_LOCK_LED_PIN);
+        wait_ms(BLINK_DELAY_MS);
+        writePinHigh(NUM_LOCK_LED_PIN);
+        wait_ms(BLINK_DELAY_MS);
+    }
+    for (int i = 0; i < 10; i++) {
+        writePinLow(SCROLL_LOCK_LED_PIN);
+        wait_ms(BLINK_DELAY_MS);
+        writePinHigh(SCROLL_LOCK_LED_PIN);
+        wait_ms(BLINK_DELAY_MS);
+    }
+    for (int i = 0; i < 10; i++) {
+        writePinLow(KEYPAD_LED_PIN); // Turn off KEYPAD_LED
+        wait_ms(BLINK_DELAY_MS);
+        writePinHigh(KEYPAD_LED_PIN); // Turn on KEYPAD_LED
+        wait_ms(BLINK_DELAY_MS);
+    }
+
+    writePinHigh(KEYPAD_LED_PIN); // Ensure the LED is off at startup
+    writePinHigh(CAPS_LOCK_LED_PIN); // Ensure the LED is off at startup
 }
+// Timer variables
+uint16_t caps_lock_led_timer = 0;
+bool caps_lock_led_state = false;
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     state = update_tri_layer_state(state, QWERTY, KEYPAD, 2); // Update layer state
@@ -320,12 +357,36 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     } else { // If KEYPAD layer is not active
         writePinHigh(KEYPAD_LED_PIN); // Turn off KEYPAD_LED
     }
+
+    // Check for Caps Word state and toggle Caps Lock LED
+    if (get_mods() & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT))) {
+        // Caps Word is active, toggle Caps Lock LED
+        if (timer_elapsed(caps_lock_led_timer) > 100) { // 100ms
+            caps_lock_led_timer = timer_read();
+            caps_lock_led_state = !caps_lock_led_state;
+            if (caps_lock_led_state) {
+                writePinLow(CAPS_LOCK_LED_PIN); // Turn on CAPS_LOCK_LED for 30ms
+                // timer_set(caps_lock_led_timer, 30); // Set timer for 30ms
+                // Helyette használjuk a timer_read függvényt
+                caps_lock_led_timer = timer_read() + 30;
+            } else {
+                writePinHigh(CAPS_LOCK_LED_PIN); // Turn off CAPS_LOCK_LED for 70ms
+                // timer_set(caps_lock_led_timer, 70); // Set timer for 70ms
+                // Helyette használjuk a timer_read függvényt
+                caps_lock_led_timer = timer_read() + 70;
+            }
+        }
+    } else {
+        // Caps Word is not active, turn off Caps Lock LED
+        writePinHigh(CAPS_LOCK_LED_PIN);
+    }
+
     return state;
 }
-
 void matrix_scan_user(void) {
     // Call the layer state set function to ensure LED state is updated continuously
     layer_state_t current_layer = layer_state;
     layer_state_set_user(current_layer);
 }
+
 
