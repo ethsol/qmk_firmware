@@ -293,7 +293,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
    [KEYPAD] = LAYOUT(
     _______, _______, _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______, TO(QWERTY), QK_BOOT,
-    CK_TOGG, CK_ON,   CK_OFF,  CK_UP,   CK_DOWN, CK_RST,                                                                  _______, KC_NUM,  KC_PEQL, KC_PSLS, KC_PAST,  _______,
+    _______, _______, _______, _______, _______, _______,                                                                 _______, KC_NUM,  KC_PEQL, KC_PSLS, KC_PAST,  _______,
     _______, _______, _______, MS_UP,   MS_BTN1, MS_WHLU,                                                                 MS_BTN2, KC_KP_7, KC_KP_8, KC_KP_9, KC_PMNS,  _______,
     _______, MS_BTN2, MS_LEFT, MS_DOWN, MS_RGHT, MS_BTN3,                                                                 MS_BTN1, KC_KP_4, KC_KP_5, KC_KP_6, KC_PPLS,  _______,
     _______, _______, _______, MS_WHLL, MS_WHLR, MS_WHLD,                                                                 MS_BTN3, KC_KP_1, KC_KP_2, KC_KP_3, KC_PENT,  _______,
@@ -312,11 +312,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #define SCROLL_LOCK_LED_PIN C4
 
 void matrix_init_user(void) {
-    setPinOutput(KEYPAD_LED_PIN); // Set pin as output for KEYPAD_LED
-    setPinOutput(CAPS_LOCK_LED_PIN); // Set pin as output for CAPS_LOCK_LED
-    setPinOutput(NUM_LOCK_LED_PIN); // Set pin as output for NUM_LOCK_LED
-    setPinOutput(SCROLL_LOCK_LED_PIN); // Set pin as output for SCROLL_LOCK_LED
+    setPinOutput(KEYPAD_LED_PIN);       // Set pin as output for KEYPAD_LED
+    setPinOutput(CAPS_LOCK_LED_PIN);    // Set pin as output for CAPS_LOCK_LED
+    setPinOutput(NUM_LOCK_LED_PIN);     // Set pin as output for NUM_LOCK_LED
+    setPinOutput(SCROLL_LOCK_LED_PIN);  // Set pin as output for SCROLL_LOCK_LED
 
+    writePinHigh(KEYPAD_LED_PIN);       // Set pin as output for KEYPAD_LED
+    writePinHigh(CAPS_LOCK_LED_PIN);    // Set pin as output for CAPS_LOCK_LED
+    writePinHigh(NUM_LOCK_LED_PIN);     // Set pin as output for NUM_LOCK_LED
+    writePinHigh(SCROLL_LOCK_LED_PIN);  // Set pin as output for SCROLL_LOCK_LED
+
+#ifdef LED_BLINK_AT_STARTUP
     #define BLINK_DELAY_MS 100
     for (int i = 0; i < 10; i++) {
         writePinLow(CAPS_LOCK_LED_PIN);
@@ -342,9 +348,24 @@ void matrix_init_user(void) {
         writePinHigh(KEYPAD_LED_PIN); // Turn on KEYPAD_LED
         wait_ms(BLINK_DELAY_MS);
     }
+#endif
 
-    writePinHigh(KEYPAD_LED_PIN); // Ensure the LED is off at startup
-    writePinHigh(CAPS_LOCK_LED_PIN); // Ensure the LED is off at startup
+#define FUTOFENY
+#ifdef FUTOFENY
+    #define FUTOFENY_LED(pin) {writePinLow(pin); wait_ms(100); writePinHigh(pin);}
+    for(int i = 0; i < 2; i++){
+        FUTOFENY_LED(CAPS_LOCK_LED_PIN)
+        FUTOFENY_LED(NUM_LOCK_LED_PIN)
+        FUTOFENY_LED(SCROLL_LOCK_LED_PIN)
+        FUTOFENY_LED(KEYPAD_LED_PIN)
+        FUTOFENY_LED(KEYPAD_LED_PIN)
+        FUTOFENY_LED(SCROLL_LOCK_LED_PIN)
+        FUTOFENY_LED(NUM_LOCK_LED_PIN)
+        FUTOFENY_LED(CAPS_LOCK_LED_PIN)}
+#endif
+
+    // writePinHigh(KEYPAD_LED_PIN); // Ensure the LED is off at startup
+    // writePinHigh(CAPS_LOCK_LED_PIN); // Ensure the LED is off at startup
 }
 // Timer variables
 uint16_t caps_lock_led_timer = 0;
