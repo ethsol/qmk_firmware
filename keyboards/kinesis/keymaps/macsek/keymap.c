@@ -293,7 +293,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
    [KEYPAD] = LAYOUT(
     _______, _______, _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______, TO(QWERTY), QK_BOOT,
-    _______, _______, _______, _______, _______, _______,                                                                 _______, KC_NUM,  KC_PEQL, KC_PSLS, KC_PAST,  _______,
+    CK_TOGG, CK_ON,   CK_OFF,  CK_UP,   CK_DOWN, CK_RST,                                                                  _______, KC_NUM,  KC_PEQL, KC_PSLS, KC_PAST,  _______,
     _______, _______, _______, MS_UP,   MS_BTN1, MS_WHLU,                                                                 MS_BTN2, KC_KP_7, KC_KP_8, KC_KP_9, KC_PMNS,  _______,
     _______, MS_BTN2, MS_LEFT, MS_DOWN, MS_RGHT, MS_BTN3,                                                                 MS_BTN1, KC_KP_4, KC_KP_5, KC_KP_6, KC_PPLS,  _______,
     _______, _______, _______, MS_WHLL, MS_WHLR, MS_WHLD,                                                                 MS_BTN3, KC_KP_1, KC_KP_2, KC_KP_3, KC_PENT,  _______,
