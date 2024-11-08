@@ -1,9 +1,9 @@
 // Copyright 2023 QMK
 // SPDX-License-Identifier: GPL-2.0-or-later
- 
+
 #include QMK_KEYBOARD_H
 
-#define QWERTY 0 // Base qwerty
+enum {QWERTY, KEYPAD}; // Base qwerty
 
 
 /****************************************************************************************************
@@ -11,7 +11,7 @@
 * Keymap: Default Layer in Qwerty
 *
 * ,-------------------------------------------------------------------------------------------------------------------.
-* | Esc    |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F8  |  F9  |  F10 |  F12 | PSCR | SLCK | PAUS |  FN0 |  BOOT  |
+* | Esc    |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F8  |  F9  |  F10 |  F12 | PSCR | SLCK | PAUS |KEYPAD|        |
 * |--------+------+------+------+------+------+---------------------------+------+------+------+------+------+--------|
 * | =+     |  1!  |  2@  |  3#  |  4$  |  5%  |                           |  6^  |  7&  |  8*  |  9(  |  0)  | -_     |
 * |--------+------+------+------+------+------|                           +------+------+------+------+------+--------|
@@ -21,7 +21,7 @@
 * |--------+------+------+------+------+------|                           |------+------+------+------+------+--------|
 * | Shift  |   Z  |   X  |   C  |   V  |   B  |                           |   N  |   M  |  ,.  |  .>  |  /?  | Shift  |
 * `--------+------+------+------+------+-------                           `------+------+------+------+------+--------'
-*          | `~   | INS  | Left | Right|                                         | Up   | Down |  [{  |  ]}  |
+*          | `~   |  \|  | Left | Right|                                         | Up   | Down |  [{  |  ]}  |
 *          `---------------------------'                                         `---------------------------'
 *                                        ,-------------.         ,-------------.
 *                                        | Ctrl | Alt  |         | Gui  | Ctrl |
@@ -30,20 +30,104 @@
 *                                 | BkSp | Del  |------|         |------|Return| Space|
 *                                 |      |      | End  |         | PgDn |      |      |
 *                                 `--------------------'         `--------------------'
+*
+*
+*
+*  Keypad layer (empty labels are see-trhu to QWERTY layer)
+*
+* ,-------------------------------------------------------------------------------------------------------------------.
+* |        |      |      |      |      |      |      |      |      |      |      |      |      |      |      |  BOOT  |
+* |--------+------+------+------+------+------+---------------------------+------+------+------+------+------+--------|
+* |        |      |      |      |      |      |                           |      |  Num |  =   |  /   |  *   |        |
+* |--------+------+------+------+------+------|                           +------+------+------+------+------+--------|
+* |        |      |      |      |      |      |                           |      |  7   |  8   |  9   |  -   |        |
+* |--------+------+------+------+------+------|                           |------+------+------+------+------+--------|
+* |        |      |      |      |      |      |                           |      |  4   |  5   |  6   |  +   |        |
+* |--------+------+------+------+------+------|                           |------+------+------+------+------+--------|
+* |        |      |      |      |      |      |                           |      |  1   |  2   |  3   | Ent  |        |
+* `--------+------+------+------+------+-------                           `------+------+------+------+------+--------'
+*          |      |  Ins |      |      |                                         |      |      |  .   | Ent  |
+*          `---------------------------'                                         `---------------------------'
+*                                        ,-------------.         ,-------------.
+*                                        |      |      |         |AltGr |      |
+*                                 ,------|------|------|         |------+------+------.
+*                                 |      |      |      |         |      |      |      |
+*                                 |      |      |------|         |------|      |  0   |
+*                                 |      |      |      |         |      |      |      |
+*                                 `--------------------'         `--------------------'
+*
+* Keypad layer (merged with QWERTY layer)
+*
+* ,-------------------------------------------------------------------------------------------------------------------.
+* |(Esc)   | (F1) | (F2) | (F3) | (F4) | (F5) | (F6) | (F8) | (F9) | (F10)| (F12)|(PSCR)|(SLCK)|(PAUS)| (FN0)|  BOOT  |
+* |--------+------+------+------+------+------+---------------------------+------+------+------+------+------+--------|
+* | (=+)   | (1!) | (2@) | (3#) | (4$) | (5%) |                           | (6^) |  Num |  =   |  /   |  *   | (-_)   |
+* |--------+------+------+------+------+------|                           +------+------+------+------+------+--------|
+* |(Tab)   |  (Q) |  (W) |  (E) |  (R) |  (T) |                           |  (Y) |  7   |  8   |  9   |  -   | (\|)   |
+* |--------+------+------+------+------+------|                           |------+------+------+------+------+--------|
+* |(Caps)  |  (A) |  (S) |  (D) |  (F) |  (G) |                           |  (H) |  4   |  5   |  6   |  +   |('")    |
+* |--------+------+------+------+------+------|                           |------+------+------+------+------+--------|
+* |(Shift) |  (Z) |  (X) |  (C) |  (V) |  (B) |                           |  (N) |  1   |  2   |  3   | Ent  |(Shift) |
+* `--------+------+------+------+------+-------                           `------+------+------+------+------+--------'
+*          | (`~) |  Ins |(Left)|(Rght)|                                         |(Up)  |(Down)|  .   | Ent  |
+*          `---------------------------'                                         `---------------------------'
+*                                        ,-------------.         ,-------------.
+*                                        |(Ctrl)|(Alt) |         |AltGr |(Ctrl)|
+*                                 ,------|------|------|         |------+------+------.
+*                                 |      |      |(Home)|         |(PgUp)|      |      |
+*                                 |(BkSp)|(Del) |------|         |------|(Ret) |  0   |
+*                                 |      |      |(End) |         |(PgDn)|      |      |
+*                                 `--------------------'         `--------------------'
 */
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [QWERTY] = LAYOUT(
-    KC_ESC,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,    KC_F6,    KC_F7,    KC_F8,         KC_F9,    KC_F10,   KC_F11,   KC_F12,   KC_PSCR,  KC_SCRL,  KC_PAUS,  KC_NO,    QK_BOOT,
-    KC_EQL,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,                                                                      KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,
-    KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,                                                                      KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_BSLS,
-    KC_CAPS,  KC_A,     KC_S,     KC_D,     KC_F,     KC_G,                                                                      KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,
-    KC_LSFT,  KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,                                                                      KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,
-              KC_GRV,   KC_INS,   KC_LEFT,  KC_RGHT,                                                                                       KC_UP,    KC_DOWN,  KC_LBRC,  KC_RBRC,
-                                                      KC_LCTL,  KC_LALT,                                               KC_RGUI,  KC_RCTL,
-                                                                KC_HOME,                                               KC_PGUP,
-                                            KC_BSPC,  KC_DEL,   KC_END,                                                KC_PGDN,  KC_ENTER, KC_SPC
-  )
+    KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,              KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, KC_SCRL, KC_PAUS, TO(KEYPAD),XXXXXXX,
+    KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                                                     KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
+    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                                                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+    KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                                                                     KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                                                     KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+             KC_GRV,  KC_BSLS, KC_LEFT, KC_RGHT,                                                                                    KC_UP,   KC_DOWN, KC_LBRC, KC_RBRC,
+                                                 KC_LCTL, KC_LALT,                                              KC_RGUI, KC_RCTL,
+                                                          KC_HOME,                                              KC_PGUP,
+                                         KC_BSPC, KC_DEL, KC_END,                                               KC_PGDN, KC_ENTER, KC_SPC
+  ),
 
+ [KEYPAD] = LAYOUT(
+    _______, _______, _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______, TO(QWERTY),QK_BOOT,
+    _______, _______, _______, _______, _______, _______,                                                                 _______, KC_NUM,  KC_PEQL, KC_PSLS, KC_PAST,  _______,
+    _______, _______, _______, _______, _______, _______,                                                                 _______, KC_KP_7, KC_KP_8, KC_KP_9, KC_PMNS,  _______,
+    _______, _______, _______, _______, _______, _______,                                                                 _______, KC_KP_4, KC_KP_5, KC_KP_6, KC_PPLS,  _______,
+    _______, _______, _______, _______, _______, _______,                                                                 _______, KC_KP_1, KC_KP_2, KC_KP_3, KC_PENT,  _______,
+             _______,  KC_INS, _______, _______,                                                                                   _______, _______, KC_PDOT, KC_PENT,
+                                                 _______, _______,                                               KC_RALT, _______,
+                                                          _______,                                               _______,
+                                        _______, _______, _______,                                               _______, _______, KC_KP_0
+  )
 };
+
+
+#define KEYPAD_LED_PIN C3
+
+void matrix_init_user(void) {
+    setPinOutput(KEYPAD_LED_PIN); // Set C3 as output for KEYPAD_LED
+    writePinLow(KEYPAD_LED_PIN); // Ensure the LED is off at startup
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    state = update_tri_layer_state(state, QWERTY, KEYPAD, 2); // Update layer state
+    if (layer_state_cmp(state, KEYPAD)) {  // If KEYPAD layer is active
+        writePinLow(KEYPAD_LED_PIN); // Turn on KEYPAD_LED
+    } else { // If KEYPAD layer is not active
+        writePinHigh(KEYPAD_LED_PIN); // Turn off KEYPAD_LED
+    }
+    return state;
+}
+void matrix_scan_user(void) {
+    // Call the layer state set function to ensure LED state is updated continuously
+    layer_state_t current_layer = layer_state;
+    layer_state_set_user(current_layer);
+}
+
