@@ -8,6 +8,9 @@
 #define QWERTY 0 // Base qwerty
 #define KEYPAD 1
 
+#define CAPS_LED_DUTY_CYCLE   222
+#define CAPS_LED_FULL_CYCLE   333
+
 /****************************************************************************************************
 *
 * Keymap: Default Layer in Qwerty
@@ -370,15 +373,7 @@ void matrix_init_user(void) {
 }
 // Timer variables
 static uint16_t caps_lock_led_timer = 0;
-static uint16_t scroll_lock_led_timer = 0;
-static uint16_t num_lock_led_timer = 0;
-static uint16_t kepyad_lock_led_timer = 0;
-
 static bool caps_lock_led_state = false;
-static bool led_on = false; // LED state
-static bool led2_on = false; // LED state
-static bool led3_on = false; // LED state
-static bool led4_on = false; // LED state
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     state = update_tri_layer_state(state, QWERTY, KEYPAD, 2); // Update layer state
@@ -388,27 +383,20 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         writePinHigh(KEYPAD_LED_PIN); // Turn off KEYPAD_LED
     }
 
-    #define CAPS_LED_DUTY_CYCLE    50
-    #define NUM_LED_DUTY_CYCLE    100
-    #define SCROLL_LED_DUTY_CYCLE 200
-    #define KP_LED_DUTY_CYCLE     250
-
     // Check for Caps Word state and toggle Caps Lock LED
     if (is_caps_word_on()) {
         // Caps Word is active, toggle Caps Lock LED
-        if (timer_elapsed(caps_lock_led_timer) > 100) { // 100ms
-            caps_lock_led_timer = timer_read();
-            caps_lock_led_state = !caps_lock_led_state;
-            if (caps_lock_led_state) {
-                writePinLow(CAPS_LOCK_LED_PIN); // Turn on CAPS_LOCK_LED for 30ms
-                // timer_set(caps_lock_led_timer, 30); // Set timer for 30ms
-                // Helyette használjuk a timer_read függvényt
-                caps_lock_led_timer = timer_read() + 300;
-            } else {
-                writePinHigh(CAPS_LOCK_LED_PIN); // Turn off CAPS_LOCK_LED for 70ms
-                // timer_set(caps_lock_led_timer, 70); // Set timer for 70ms
-                // Helyette használjuk a timer_read függvényt
-                caps_lock_led_timer = timer_read() + 700;
+        if(caps_lock_led_state){
+            if(timer_elapsed(caps_lock_led_timer) >= (CAPS_LED_FULL_CYCLE - CAPS_LED_DUTY_CYCLE)){
+                writePinLow(CAPS_LOCK_LED_PIN);
+                caps_lock_led_state = false;
+                caps_lock_led_timer = timer_read();
+            }
+        } else {
+            if(timer_elapsed(caps_lock_led_timer) >= CAPS_LED_DUTY_CYCLE){
+                writePinHigh(CAPS_LOCK_LED_PIN);
+                caps_lock_led_state = true;
+                caps_lock_led_timer = timer_read();
             }
         }
     } else if(host_keyboard_led_state().caps_lock) {
@@ -417,64 +405,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     } else {
         // Caps Word is not active, neither CapsLock: turn off Caps Lock LED
         writePinHigh(CAPS_LOCK_LED_PIN);
-    }
-
-    if (led_on) {
-        // Ha a LED bekapcsolt, ellenőrizzük, hogy letelt-e a SCROLL_LED_DUTY_CYCLE idő
-        if (timer_elapsed(scroll_lock_led_timer) >= (333 - SCROLL_LED_DUTY_CYCLE)) {
-            writePinLow(SCROLL_LOCK_LED_PIN);  // Kikapcsolja a LED-et
-            led_on = false;  // Állapot frissítése
-            scroll_lock_led_timer = timer_read();  // Újraindítja az időzítőt
-        }
-    } else {
-        // Ha a LED kikapcsolt, ellenőrizzük, hogy letelt-e a teljes 1 másodperc
-        if (timer_elapsed(scroll_lock_led_timer) >= SCROLL_LED_DUTY_CYCLE) {
-            writePinHigh(SCROLL_LOCK_LED_PIN);  // Bekapcsolja a LED-et
-            led_on = true;  // Állapot frissítése
-            scroll_lock_led_timer = timer_read();  // Újraindítja az időzítőt
-        }
-    }
-
-    if(led2_on){
-        if(timer_elapsed(num_lock_led_timer) >= (333 - NUM_LED_DUTY_CYCLE)){
-            writePinLow(NUM_LOCK_LED_PIN);
-            led2_on = false;
-            num_lock_led_timer = timer_read();
-        }
-    } else {
-        if(timer_elapsed(num_lock_led_timer) >= NUM_LED_DUTY_CYCLE){
-            writePinHigh(NUM_LOCK_LED_PIN);
-            led2_on = true;
-            num_lock_led_timer = timer_read();
-        }
-    }
-
-    if(led3_on){
-        if(timer_elapsed(caps_lock_led_timer) >= (333 - CAPS_LED_DUTY_CYCLE)){
-            writePinLow(CAPS_LOCK_LED_PIN);
-            led3_on = false;
-            caps_lock_led_timer = timer_read();
-        }
-    } else {
-        if(timer_elapsed(caps_lock_led_timer) >= CAPS_LED_DUTY_CYCLE){
-            writePinHigh(CAPS_LOCK_LED_PIN);
-            led3_on = true;
-            caps_lock_led_timer = timer_read();
-        }
-    }
-
-    if(led4_on){
-        if(timer_elapsed(kepyad_lock_led_timer) >= (333 - KP_LED_DUTY_CYCLE)){
-            writePinLow(KEYPAD_LED_PIN);
-            led4_on = false;
-            kepyad_lock_led_timer = timer_read();
-        }
-    } else {
-        if(timer_elapsed(kepyad_lock_led_timer) >= KP_LED_DUTY_CYCLE){
-            writePinHigh(KEYPAD_LED_PIN);
-            led4_on = true;
-            kepyad_lock_led_timer = timer_read();
-        }
     }
 
     return state;
