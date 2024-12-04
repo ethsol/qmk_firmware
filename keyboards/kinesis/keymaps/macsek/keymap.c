@@ -57,8 +57,10 @@
 void dance_1_f1_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F1);  // Hold-ra az F1-et küldi
-    } else if (state->count == 1) {
-        tap_code(KC_1);   // Tap-ra az 1-et küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_1);   // Tap-ra az 1-et küldi
+        }
     }
 }
 
@@ -68,93 +70,113 @@ void dance_1_reset(tap_dance_state_t *state, void *user_data) {
 
 // Tap Dance functions for each enum item
 
-
-
 void dance_2_f2_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F2);  // Hold-ra az F2-t küldi
-    } else if (state->count == 1) {
-        tap_code(KC_2);   // Tap-ra a 2-t küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_2);   // Tap-ra a 2-t küldi
+        }
     }
 }
 
 void dance_3_f3_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F3);  // Hold-ra az F3-t küldi
-    } else if (state->count == 1) {
-        tap_code(KC_3);   // Tap-ra a 3-t küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_3);   // Tap-ra a 3-t küldi
+        }
     }
 }
 
 void dance_4_f4_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F4);  // Hold-ra az F4-t küldi
-    } else if (state->count == 1) {
-        tap_code(KC_4);   // Tap-ra a 4-t küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_4);   // Tap-ra a 4-t küldi
+        }
     }
 }
 
 void dance_5_f5_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F5);  // Hold-ra az F5-t küldi
-    } else if (state->count == 1) {
-        tap_code(KC_5);   // Tap-ra az 5-t küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_5);   // Tap-ra az 5-t küldi
+        }
     }
 }
 
 void dance_6_f6_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F6);  // Hold-ra az F6-t küldi
-    } else if (state->count == 1) {
-        tap_code(KC_6);   // Tap-ra a 6-ot küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_6);   // Tap-ra a 6-ot küldi
+        }
     }
 }
 
 void dance_7_f7_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F7);  // Hold-ra az F7-t küldi
-    } else if (state->count == 1) {
-        tap_code(KC_7);   // Tap-ra a 7-t küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_7);   // Tap-ra a 7-t küldi
+        }
     }
 }
 
 void dance_8_f8_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F8);  // Hold-ra az F8-t küldi
-    } else if (state->count == 1) {
-        tap_code(KC_8);   // Tap-ra a 8-ot küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_8);   // Tap-ra a 8-ot küldi
+        }
     }
 }
 
 void dance_9_f9_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F9);  // Hold-ra az F9-t küldi
-    } else if (state->count == 1) {
-        tap_code(KC_9);   // Tap-ra a 9-ot küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_9);   // Tap-ra a 9-ot küldi
+        }
     }
 }
 
 void dance_0_f10_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F10); // Hold-ra az F10-et küldi
-    } else if (state->count == 1) {
-        tap_code(KC_GRV);   // Tap-ra a 0-át küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_GRV);   // Tap-ra a 0-át küldi
+        }
     }
 }
 
 void dance_0_f11_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F11); // Hold-ra az F11-et küldi
-    } else if (state->count == 1) {
-        tap_code(KC_0);   // Tap-ra a 0-át küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_0);   // Tap-ra a 0-át küldi
+        }
     }
 }
 
 void dance_m_f12_finished(tap_dance_state_t *state, void *user_data) {
     if (state->pressed) {
         tap_code(KC_F12); // Hold-ra az F12-t küldi
-    } else if (state->count == 1) {
-        tap_code(KC_MINS);    // Tap-ra az M-et küldi
+    } else {
+        for(int i=0; i<state->count; i++){
+            tap_code(KC_MINS);    // Tap-ra az M-et küldi
+        }
     }
 }
 
